@@ -38,24 +38,22 @@ ClipX — локальный менеджер буфера обмена для �
 
 ## Скриншоты
 
-> Здесь оставлены места под скриншоты — просто вставьте свои изображения в этот блок.
-
 ### Основной интерфейс
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/0f172a/e2e8f0?text=ClipX+Основной+интерфейс" alt="ClipX main interface" width="1200" />
+  <img src="docs/screenshots/clipx-main-interface.png" alt="ClipX основной интерфейс" width="1200" />
 </div>
 
-### Простая форма / быстрый ввод
+### Простой режим
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/111827/a5b4fc?text=ClipX+Простой+режим" alt="ClipX simple mode" width="1200" />
+  <img src="docs/screenshots/clipx-simple-mode.png" alt="ClipX простой режим" width="1200" />
 </div>
 
-### Поиск, фильтры и операции с выделением
+### Карточка объекта буфера
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/172033/f8fafc?text=Поиск+Фильтры+Групповые+действия" alt="ClipX filters and bulk actions" width="1200" />
+  <img src="docs/screenshots/clipx-buffer-card.png" alt="ClipX карточка объекта буфера" width="1200" />
 </div>
 
 ## Технологии

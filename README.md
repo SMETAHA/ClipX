@@ -36,26 +36,24 @@ It helps you keep everything you regularly copy, save, or reference in one priva
 - экспортировать и импортировать резервные копии
 - использовать локальный QR и LAN-доступ
 
-## Скриншоты
+## Screenshots
 
-> Места под скриншоты готовы — просто вставьте свои изображения в этот раздел.
-
-### Основной интерфейс
+### Main interface
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/0f172a/e2e8f0?text=ClipX+Main+Interface" alt="ClipX main interface" width="1200" />
+  <img src="docs/screenshots/clipx-main-interface.png" alt="ClipX main interface" width="1200" />
 </div>
 
-### Простая форма / быстрый ввод
+### Simple mode
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/111827/a5b4fc?text=ClipX+Simple+Mode" alt="ClipX simple mode" width="1200" />
+  <img src="docs/screenshots/clipx-simple-mode.png" alt="ClipX simple mode" width="1200" />
 </div>
 
-### Поиск, фильтры и управление записями
+### Buffer item card
 
 <div align="center">
-  <img src="https://placehold.co/1400x800/172033/f8fafc?text=Search+Filters+Bulk+Actions" alt="ClipX filters and bulk actions" width="1200" />
+  <img src="docs/screenshots/clipx-buffer-card.png" alt="ClipX buffer item card" width="1200" />
 </div>
 
 ## Технологии
