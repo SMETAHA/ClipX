@@ -1,88 +1,84 @@
-# ClipX
+# Руководство по деплою
 
-ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR-скриптов.
+Проект ClipX — локальный Flask-сервис, который можно разворачивать как на сервере, так и в контейнере.
 
-## Что умеет проект
+## 1) Развёртывание на VPS
 
-- сохранять текст и URL из буфера обмена
-- хранить файлы, скриншоты и документы
-- закреплять и отмечать избранное
-- автоматически показывать превью ссылок
-- распознавать текст на изображениях через OCR
-- работать в обычном и упрощённом интерфейсе
-- экспортировать и импортировать резервные копии
-- открывать приложение по QR-коду или локальной сети
-
-## Скриншоты
-
-### Скриншот 1
-
-<!-- Вставьте свой скриншот сюда -->
-<div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=%D0%A1%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82+1" alt="ClipX Screenshot 1" width="1200" />
-</div>
-
-### Скриншот 2
-
-<!-- Вставьте свой скриншот сюда -->
-<div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=%D0%A1%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82+2" alt="ClipX Screenshot 2" width="1200" />
-</div>
-
-## Быстрый старт
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Для OCR на Linux:
+Подойдёт Ubuntu/Debian. Для запуска потребуются Python 3.11+ и gunicorn.
 
 ```bash
 sudo apt update
-sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
+sudo apt install python3-venv python3-pip nginx
+
+cd /opt/clipx
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
 ```
 
-Запуск:
+Для запуска в прод режиме:
 
 ```bash
-python app.py
+gunicorn app:app --bind 0.0.0.0:5050 --workers 2 --timeout 120
 ```
 
-По умолчанию приложение доступно по адресу:
+Для Nginx можно настроить reverse proxy на `127.0.0.1:5050`.
 
-```text
-http://localhost:5050
+## 2) Docker
+
+```bash
+docker build -t clipx .
+docker run --rm -p 5050:5050 -v $(pwd)/data:/app/data clipx
 ```
+
+Или через Compose:
+
+```bash
+docker compose up --build -d
+```
+
+## 3) Render
+
+Используйте шаблон `render.yaml`.
+
+1. Создайте новый Web Service в Render.
+2. Подключите GitHub-репозиторий.
+3. Выберите Python.
+4. Render автоматически возьмёт параметры из шаблона.
+
+## 4) Railway
+
+Используйте шаблон `railway.json`.
+
+1. Создайте проект в Railway.
+2. Подключите репозиторий.
+3. Railway запустит сервис по указанной команде.
 
 ## Переменные окружения
 
-```bash
-CLIPX_PORT=5050 python app.py
-CLIPX_PUBLIC_URL=http://192.168.1.25:5050 python app.py
-CLIPX_HOST_IP=192.168.1.25 python app.py
+Рекомендуемые настройки:
+
+```env
+CLIPX_PORT=5050
+CLIPX_SECRET=replace_with_secure_secret
+CLIPX_MAX_MB=1024
 ```
 
-## Развёртывание
+## Проверка здоровья
 
-Подготовлены инструкции для:
+Приложение отдаёт endpoint:
 
-- локального Docker-развёртывания
-- VPS через gunicorn
-- Render
-- Railway
+```text
+GET /health
+```
 
-См. [deployment/README.md](deployment/README.md).
+Проверка:
 
-## Страницы и демо
+```bash
+curl http://localhost:5050/health
+```
 
-Фронтенд-предпросмотр проекта находится в `docs/index.html` и используется для демонстрации пользовательского интерфейса проекта на GitHub Pages.
+## Важно
 
-## Лицензия
-
-Проект распространяется под лицензией MIT. См. [LICENSE](LICENSE).
-
-## Безопасность
-
-См. [SECURITY.md](SECURITY.md).
+Проект хранит локальные данные в `data/` и лучше подходит для приватного или полу-приватного развёртывания, чем для публичного SaaS-сервиса.

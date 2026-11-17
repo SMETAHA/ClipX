@@ -1,36 +1,31 @@
-# Security Policy
+# Политика безопасности
 
-## Supported versions
+## Поддерживаемые версии
 
-The project is currently supported in its main branch for security updates.
+Для обновлений безопасности поддерживается основная ветка проекта.
 
-## Reporting a vulnerability
+## Сообщение об уязвимости
 
-Please do not open a public GitHub issue for security concerns.
+Пожалуйста, не публикуйте уязвимость в публичном issue GitHub.
 
-Instead, report it privately by email or via a GitHub security advisory if available.
+Сообщайте её приватно через GitHub Security Advisories или через контактные данные владельца репозитория.
 
-Use the following contact method if configured in your repository settings:
+В сообщении лучше указать:
 
-- GitHub Security Advisories: private vulnerability reporting
-- Or email the maintainer directly through the repository owner contact information
+- описание проблемы
+- затронутый компонент или маршрут
+- шаги воспроизведения
+- оценку серьёзности
+- возможное исправление или обходной путь
 
-Please include:
+Мы постараемся быстро отреагировать.
 
-- a description of the issue
-- affected component or endpoint
-- steps to reproduce
-- severity assessment
-- any suggested fix or mitigation
+## Ожидания по раскрытию
 
-We will review and respond as quickly as possible.
+- не публиковать информацию до готовности исправления
+- предоставлять достаточно данных для подтверждения и воспроизведения
+- избегать разрушительного тестирования на продакшн-системах
 
-## Disclosure expectations
+## Ответственный disclosure
 
-- Do not publicly disclose the issue before a fix is ready.
-- Provide enough information to confirm and reproduce the report.
-- Avoid destructive testing against production systems.
-
-## Responsible disclosure
-
-We appreciate responsible security research and will work with reporters in good faith to validate and fix issues promptly.
+Мы ценим ответственные исследования безопасности и готовы совместно проверять и исправлять проблемы.

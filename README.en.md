@@ -2,31 +2,30 @@
 
 ClipX is a local-first clipboard manager for text, links, files, images, and OCR-powered snippets.
 
-## What it does
+## What the project does
 
-- save text and URLs from the clipboard
-- collect files, screenshots, and documents
-- pin and favorite entries for quick access
-- auto-preview links and metadata
-- extract text from images using OCR
-- work with both a full and a simplified interface
-- export and import backup archives
-- access the app via QR code or local network URL
+- save text and URLs
+- store files, screenshots, and PDFs
+- pin important entries and mark favorites
+- preview links automatically
+- extract text from images via OCR
+- work in both full and simplified mode
+- export and import database backups
+- connect over QR code and LAN
+- search and filter saved items quickly
 
 ## Screenshots
 
-### Screenshot 1
+### Main interface
 
-<!-- Replace with your own screenshot -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=Screenshot+1" alt="ClipX Screenshot 1" width="1200" />
+  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=ClipX+main+interface" alt="ClipX main interface" width="1200" />
 </div>
 
-### Screenshot 2
+### Simple mode
 
-<!-- Replace with your own screenshot -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=Screenshot+2" alt="ClipX Screenshot 2" width="1200" />
+  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=ClipX+simple+mode" alt="ClipX simple mode" width="1200" />
 </div>
 
 ## Quick start
@@ -50,7 +49,7 @@ Run:
 python app.py
 ```
 
-Default URL:
+Open in the browser:
 
 ```text
 http://localhost:5050
@@ -66,18 +65,18 @@ CLIPX_HOST_IP=192.168.1.25 python app.py
 
 ## Deployment
 
-The repo includes deployment templates for:
+The repo includes templates for:
 
-- Docker-based local deployment
-- VPS with gunicorn
+- local Docker deployment
+- VPS / server deployment
 - Render
 - Railway
 
-See [deployment/README.md](deployment/README.md).
+See [deployment/README.en.md](deployment/README.en.md).
 
-## Frontend demo
+## GitHub Pages
 
-The current UI mockup is available in `docs/index.html` and is suitable for a GitHub Pages showcase of the project interface.
+The `docs/index.html` preview is built from the real HTML/CSS sources in `templates/` and `static/`, without adding unrelated functionality.
 
 ## License
 

@@ -1,32 +1,31 @@
 # ClipX
 
-ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR-скриптов.
+ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR.
 
 ## Что умеет проект
 
-- сохранять текст и URL из буфера обмена
-- хранить файлы, скриншоты и документы
-- закреплять и отмечать избранное
+- сохранять текст и ссылки
+- хранить файлы, картинки и PDF
+- закреплять важные записи и помечать избранное
 - автоматически показывать превью ссылок
 - распознавать текст на изображениях через OCR
-- работать в обычном и упрощённом интерфейсе
-- экспортировать и импортировать резервные копии
-- открывать приложение по QR-коду или локальной сети
+- работать в обычном и упрощённом режиме
+- экспортировать и импортировать бэкап базы
+- подключаться по QR-коду и LAN
+- быстро искать и фильтровать записи
 
 ## Скриншоты
 
-### Скриншот 1
+### Основной интерфейс
 
-<!-- Вставьте свой скриншот сюда -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=%D0%A1%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82+1" alt="ClipX Screenshot 1" width="1200" />
+  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=ClipX+main+interface" alt="ClipX main interface" width="1200" />
 </div>
 
-### Скриншот 2
+### Простой режим
 
-<!-- Вставьте свой скриншот сюда -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=%D0%A1%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82+2" alt="ClipX Screenshot 2" width="1200" />
+  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=ClipX+simple+mode" alt="ClipX simple mode" width="1200" />
 </div>
 
 ## Быстрый старт
@@ -50,7 +49,7 @@ sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 python app.py
 ```
 
-По умолчанию приложение доступно по адресу:
+Открыть в браузере:
 
 ```text
 http://localhost:5050
@@ -66,23 +65,23 @@ CLIPX_HOST_IP=192.168.1.25 python app.py
 
 ## Развёртывание
 
-Подготовлены инструкции для:
+В репозитории есть шаблоны для:
 
-- локального Docker-развёртывания
-- VPS через gunicorn
+- локального запуска через Docker
+- VPS / server deployment
 - Render
 - Railway
 
-См. [deployment/README.md](deployment/README.md).
+Смотрите [deployment/README.ru.md](deployment/README.ru.md).
 
-## Страницы и демо
+## GitHub Pages
 
-Фронтенд-предпросмотр проекта находится в `docs/index.html` и используется для демонстрации пользовательского интерфейса проекта на GitHub Pages.
+В `docs/index.html` лежит preview интерфейса проекта, собранный по реальному HTML/CSS из `templates/` и `static/`, без лишних выдуманных функций.
 
 ## Лицензия
 
-Проект распространяется под лицензией MIT. См. [LICENSE](LICENSE).
+Проект распространяется по лицензии MIT. См. [LICENSE](LICENSE).
 
 ## Безопасность
 
-См. [SECURITY.md](SECURITY.md).
+См. [SECURITY.ru.md](SECURITY.ru.md).

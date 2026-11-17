@@ -1,45 +1,36 @@
 # ClipX
 
-ClipX is a local-first clipboard manager for text, URLs, files, images, and OCR-powered snippets.
+ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR.
 
-It helps you capture useful information quickly and keep it organized without depending on a cloud backend.
+Это проект для быстрой упаковки полезной информации: заметки, ссылки, файлы, скриншоты, код и всё, что обычно держат в буфере обмена или в папке «временно пригодится».
 
-## Overview
+## Что умеет
 
-- Save text and URLs from the clipboard
-- Collect files, screenshots, and documents
-- Pin favorite items and keep them visible
-- Auto-preview web links and metadata
-- OCR screenshots and images
-- Use a simple and a full interface
-- Export/import backup archives
-- Share via QR or LAN URL on the local network
+- сохранять текст и ссылки
+- хранить файлы, картинки и PDF
+- закреплять важные записи и помечать избранное
+- автоматически показывать превью ссылок
+- распознавать текст на изображениях через OCR
+- работать в обычном и упрощённом режиме
+- экспортировать и импортировать бэкап базы
+- подключаться по QR-коду и LAN
+- быстро искать и фильтровать записи
 
-## Quick links
+## Скриншоты
 
-- [README in English](README.en.md)
-- [README в русском](README.ru.md)
-- [Security policy](SECURITY.md)
-- [Production deployment guide](deployment/README.md)
-- [GitHub Pages demo](https://smetaha.github.io/ClipX/)
+### Основной интерфейс
 
-## Screenshots
-
-### Screenshot 1
-
-<!-- Replace with your own screenshot -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=Screenshot+1" alt="ClipX screenshot 1" width="1200" />
+  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=ClipX+main+interface" alt="ClipX main interface" width="1200" />
 </div>
 
-### Screenshot 2
+### Простая форма / быстрый ввод
 
-<!-- Replace with your own screenshot -->
 <div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=Screenshot+2" alt="ClipX screenshot 2" width="1200" />
+  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=ClipX+simple+mode" alt="ClipX simple mode" width="1200" />
 </div>
 
-## Stack
+## Стек
 
 - Python 3.11+
 - Flask
@@ -47,7 +38,9 @@ It helps you capture useful information quickly and keep it organized without de
 - Pillow + Tesseract OCR
 - QR code generation
 
-## Local setup
+## Быстрый старт
+
+### 1) Установка зависимостей
 
 ```bash
 python -m venv .venv
@@ -55,26 +48,26 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-For OCR on Linux:
+### 2) OCR для Linux
 
 ```bash
 sudo apt update
 sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 ```
 
-Run:
+### 3) Запуск
 
 ```bash
 python app.py
 ```
 
-Default URL:
+Открыть в браузере:
 
 ```text
 http://localhost:5050
 ```
 
-## Environment variables
+## Переменные окружения
 
 ```bash
 CLIPX_PORT=5050 python app.py
@@ -82,22 +75,7 @@ CLIPX_PUBLIC_URL=http://192.168.1.25:5050 python app.py
 CLIPX_HOST_IP=192.168.1.25 python app.py
 ```
 
-## Production deployment
-
-This repo includes deployment templates for:
-
-- local Docker deployment
-- VPS using gunicorn
-- Render
-- Railway
-
-See [deployment/README.md](deployment/README.md) for setup instructions.
-
-## GitHub Pages
-
-The `docs/` folder contains a lightweight front-end preview based on the current project UI, useful for a visual landing page or demo.
-
-## Project structure
+## Структура проекта
 
 ```text
 ClipX/
@@ -107,6 +85,7 @@ ClipX/
 ├── README.ru.md
 ├── README.en.md
 ├── SECURITY.md
+├── SECURITY.ru.md
 ├── LICENSE
 ├── Procfile
 ├── .env.example
@@ -117,7 +96,9 @@ ClipX/
 ├── docs/
 │   └── index.html
 ├── deployment/
-│   └── README.md
+│   ├── README.md
+│   ├── README.ru.md
+│   └── README.en.md
 ├── static/
 ├── templates/
 ├── data/
@@ -125,10 +106,34 @@ ClipX/
 └── .gitignore
 ```
 
-## License
+## Документация
 
-This project is distributed under the MIT License. See [LICENSE](LICENSE).
+- [README в русском](README.ru.md)
+- [README in English](README.en.md)
+- [Security policy](SECURITY.md)
+- [Политика безопасности (RU)](SECURITY.ru.md)
+- [Deployment guide](deployment/README.md)
+- [Руководство по деплою](deployment/README.ru.md)
 
-## Security
+## Развёртывание
 
-Please review [SECURITY.md](SECURITY.md) before reporting vulnerabilities.
+В репозитории есть шаблоны для:
+
+- локального запуска через Docker
+- VPS / server deployment
+- Render
+- Railway
+
+Смотрите: [deployment/README.md](deployment/README.md)
+
+## GitHub Pages
+
+В `docs/index.html` лежит preview интерфейса проекта, собранный по реальному HTML/CSS из `templates/` и `static/`, без лишних выдуманных функций.
+
+## Лицензия
+
+Проект распространяется по лицензии MIT. См. [LICENSE](LICENSE).
+
+## Безопасность
+
+Пожалуйста, читайте [SECURITY.md](SECURITY.md) перед сообщением о уязвимости.

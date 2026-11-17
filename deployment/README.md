@@ -1,10 +1,10 @@
-# Production deployment guide
+# Руководство по деплою
 
-This project is designed as a local-first Python Flask application. The following options are ready for deployment in a production-like environment.
+Проект ClipX — локальный Flask-сервис, который можно разворачивать как на сервере, так и в контейнере.
 
-## 1) VPS / server deployment
+## 1) Развёртывание на VPS
 
-Use a Linux VM or server with Python 3.11+.
+Подойдёт Ubuntu/Debian. Для запуска потребуются Python 3.11+ и gunicorn.
 
 ```bash
 sudo apt update
@@ -15,50 +15,49 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
-python app.py
 ```
 
-Recommended production command:
+Для запуска в прод режиме:
 
 ```bash
 gunicorn app:app --bind 0.0.0.0:5050 --workers 2 --timeout 120
 ```
 
-For Nginx reverse proxy, point upstream to `127.0.0.1:5050`.
+Для Nginx можно настроить reverse proxy на `127.0.0.1:5050`.
 
-## 2) Docker deployment
+## 2) Docker
 
 ```bash
 docker build -t clipx .
 docker run --rm -p 5050:5050 -v $(pwd)/data:/app/data clipx
 ```
 
-Or with Compose:
+Или через Compose:
 
 ```bash
 docker compose up --build -d
 ```
 
-## 3) Render deployment
+## 3) Render
 
-Use the included `render.yaml` template.
+Используйте шаблон `render.yaml`.
 
-1. Create a new Web Service on Render.
-2. Connect the repository.
-3. Choose Python environment.
-4. Render will use the template values automatically.
+1. Создайте новый Web Service в Render.
+2. Подключите GitHub-репозиторий.
+3. Выберите Python.
+4. Render автоматически возьмёт параметры из шаблона.
 
-## 4) Railway deployment
+## 4) Railway
 
-Use the included `railway.json` template.
+Используйте шаблон `railway.json`.
 
-1. Create a new project on Railway.
-2. Connect the GitHub repository.
-3. Railway will run the app with the provided start command.
+1. Создайте проект в Railway.
+2. Подключите репозиторий.
+3. Railway запустит сервис по указанной команде.
 
-## Runtime environment
+## Переменные окружения
 
-Recommended settings:
+Рекомендуемые настройки:
 
 ```env
 CLIPX_PORT=5050
@@ -66,20 +65,20 @@ CLIPX_SECRET=replace_with_secure_secret
 CLIPX_MAX_MB=1024
 ```
 
-## Health check
+## Проверка здоровья
 
-The app exposes:
+Приложение отдаёт endpoint:
 
 ```text
 GET /health
 ```
 
-Example:
+Проверка:
 
 ```bash
 curl http://localhost:5050/health
 ```
 
-## Notes
+## Важно
 
-This app stores local data in `data/` and is best suited for a private or semi-private installation, not a public multi-user SaaS backend.
+Проект хранит локальные данные в `data/` и лучше подходит для приватного или полу-приватного развёртывания, чем для публичного SaaS-сервиса.
