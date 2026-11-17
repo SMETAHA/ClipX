@@ -1,32 +1,53 @@
 # ClipX
 
-ClipX is a local-first web app for collecting, organizing, and reusing text, links, and files from a personal clipboard workflow.
+ClipX is a local-first clipboard manager for text, URLs, files, images, and OCR-powered snippets.
 
-It is designed for quick capture, simple browsing, and local networking use on a home or office machine — without depending on a cloud backend.
+It helps you capture useful information quickly and keep it organized without depending on a cloud backend.
 
-## Highlights
+## Overview
 
-- Save snippets of text and URLs
-- Store and reopen files and images
-- Mark items as pinned or favorite
-- Preview web links automatically
-- Run OCR on uploaded images
-- Use bulk actions for selection-heavy workflows
-- Import and export database backups
-- Access the app over the local network via QR code
-- Switch to a lightweight `/simple` interface
+- Save text and URLs from the clipboard
+- Collect files, screenshots, and documents
+- Pin favorite items and keep them visible
+- Auto-preview web links and metadata
+- OCR screenshots and images
+- Use a simple and a full interface
+- Export/import backup archives
+- Share via QR or LAN URL on the local network
 
-## Tech stack
+## Quick links
+
+- [README in English](README.en.md)
+- [README в русском](README.ru.md)
+- [Security policy](SECURITY.md)
+- [Production deployment guide](deployment/README.md)
+- [GitHub Pages demo](https://smetaha.github.io/ClipX/)
+
+## Screenshots
+
+### Screenshot 1
+
+<!-- Replace with your own screenshot -->
+<div align="center">
+  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=Screenshot+1" alt="ClipX screenshot 1" width="1200" />
+</div>
+
+### Screenshot 2
+
+<!-- Replace with your own screenshot -->
+<div align="center">
+  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=Screenshot+2" alt="ClipX screenshot 2" width="1200" />
+</div>
+
+## Stack
 
 - Python 3.11+
 - Flask
-- SQLite for local storage
-- Pillow + Tesseract for OCR support
-- QR code generation for easy access
+- SQLite
+- Pillow + Tesseract OCR
+- QR code generation
 
-## Quick start
-
-### 1) Install dependencies
+## Local setup
 
 ```bash
 python -m venv .venv
@@ -34,20 +55,20 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2) Install OCR dependencies on Linux
+For OCR on Linux:
 
 ```bash
 sudo apt update
 sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 ```
 
-### 3) Run the app
+Run:
 
 ```bash
 python app.py
 ```
 
-The app starts on port 5050 by default:
+Default URL:
 
 ```text
 http://localhost:5050
@@ -61,30 +82,20 @@ CLIPX_PUBLIC_URL=http://192.168.1.25:5050 python app.py
 CLIPX_HOST_IP=192.168.1.25 python app.py
 ```
 
-## Docker
+## Production deployment
 
-A production-style container setup is included for local deployment:
+This repo includes deployment templates for:
 
-```bash
-docker build -t clipx .
-docker run --rm -p 5050:5050 -v $(pwd)/data:/app/data clipx
-```
+- local Docker deployment
+- VPS using gunicorn
+- Render
+- Railway
 
-You can also use Docker Compose:
+See [deployment/README.md](deployment/README.md) for setup instructions.
 
-```bash
-docker compose up --build
-```
+## GitHub Pages
 
-## GitHub Pages demo
-
-This repository includes a lightweight static landing page under `docs/` for GitHub Pages.
-
-The demo URL is:
-
-```text
-https://<your-user>.github.io/ClipX/
-```
+The `docs/` folder contains a lightweight front-end preview based on the current project UI, useful for a visual landing page or demo.
 
 ## Project structure
 
@@ -93,21 +104,31 @@ ClipX/
 ├── app.py
 ├── requirements.txt
 ├── README.md
+├── README.ru.md
+├── README.en.md
+├── SECURITY.md
 ├── LICENSE
+├── Procfile
+├── .env.example
 ├── Dockerfile
 ├── docker-compose.yml
+├── render.yaml
+├── railway.json
 ├── docs/
 │   └── index.html
+├── deployment/
+│   └── README.md
 ├── static/
 ├── templates/
 ├── data/
-└── .github/workflows/pages.yml
+├── .github/workflows/pages.yml
+└── .gitignore
 ```
 
 ## License
 
-This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is distributed under the MIT License. See [LICENSE](LICENSE).
 
-## Notes
+## Security
 
-ClipX is intended as a personal, local workflow tool. It is best suited for environments where you want a private clipboard manager with a browser UI and a local network-friendly setup.
+Please review [SECURITY.md](SECURITY.md) before reporting vulnerabilities.

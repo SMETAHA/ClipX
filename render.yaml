@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: clipx
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: CLIPX_PORT
+        value: "10000"
+      - key: CLIPX_SECRET
+        generateValue: true
+      - key: CLIPX_MAX_MB
+        value: "1024"
