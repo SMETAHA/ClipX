@@ -1,468 +1,863 @@
 <!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <title>ClipX</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root {
-            --bg: #0d1117;
-            --panel: #151b23;
-            --panel-2: #1f2630;
-            --text: #e8e2c8;
-            --muted: #9ab8d8;
-            --accent: #ffd27d;
-            --accent-2: #ff8b68;
-            --danger: #ff6b6b;
-            --ok: #80c7bd;
-            --border: rgba(255, 210, 125, 0.25);
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClipX — Interactive Demo</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: rgba(17, 24, 39, 0.9);
+      --panel-strong: #111827;
+      --muted: #9bb4d8;
+      --text: #edf2ff;
+      --accent: #ffd27d;
+      --accent-2: #ff8f70;
+      --cyan: #7dd3fc;
+      --green: #80c7bd;
+      --line: rgba(255, 210, 125, 0.22);
+      --danger: #ff746c;
+      --shadow: rgba(2, 6, 23, 0.7);
+    }
 
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(255, 210, 125, 0.12), transparent 35%),
-                radial-gradient(circle at bottom right, rgba(154, 184, 216, 0.12), transparent 35%),
-                var(--bg);
-            color: var(--text);
-        }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .page {
-            width: min(1180px, 100%);
-            margin: 0 auto;
-            padding: 24px;
-        }
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .hero h1 {
-            margin: 0;
-            font-size: 42px;
-            letter-spacing: -0.04em;
-        }
-        .hero p { margin: 8px 0 0; color: var(--muted); }
-        .hero-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-        .status {
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            color: var(--accent);
-            background: rgba(255, 210, 125, 0.08);
-            white-space: nowrap;
-        }
-        .connect-card {
-            position: relative;
-            display: grid;
-            grid-template-columns: 58px minmax(0, 1fr);
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: rgba(21, 27, 35, 0.94);
-            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
-        }
-        .connect-qr {
-            width: 58px;
-            height: 58px;
-            padding: 5px;
-            border-radius: 12px;
-            background: #fff;
-            image-rendering: pixelated;
-        }
-        .connect-text {
-            display: grid;
-            gap: 6px;
-            min-width: 0;
-        }
-        .connect-text strong {
-            color: var(--accent);
-            font-size: 13px;
-            line-height: 1.1;
-        }
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 38px;
-            padding: 8px 14px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--panel-2);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .button.primary { background: var(--accent); color: #101923; border-color: var(--accent); font-weight: 700; }
-        .button.ghost { background: transparent; }
-        .button.tiny {
-            min-height: 28px;
-            padding: 4px 8px;
-            font-size: 12px;
-            border-radius: 10px;
-        }
-        .connect-url {
-            position: absolute;
-            z-index: 20;
-            right: 0;
-            top: calc(100% + 8px);
-            max-width: min(78vw, 520px);
-            padding: 9px 11px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #0d1117;
-            color: var(--accent);
-            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.35);
-            font-family: "JetBrains Mono", monospace;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(-4px);
-            transition: opacity 120ms ease, transform 120ms ease;
-        }
-        .connect-card:hover .connect-url,
-        .connect-card:focus-within .connect-url { opacity: 1; transform: translateY(0); }
-        .panel, .toolbar, .bulkbar, .empty {
-            background: rgba(21, 27, 35, 0.92);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
-        }
-        .panel { margin-bottom: 18px; }
-        .panel h2 { margin: 0 0 14px; font-size: 20px; }
-        .compact-panel { padding: 12px; }
-        .feature-strip {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .feature-pill {
-            display: inline-flex;
-            align-items: center;
-            min-height: 28px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            border: 1px solid rgba(154, 184, 216, 0.18);
-            background: rgba(154, 184, 216, 0.08);
-            color: var(--muted);
-            font-size: 13px;
-        }
-        .input, .textarea, .select, .file-input {
-            width: 100%;
-            border: 1px solid rgba(154, 184, 216, 0.25);
-            background: #0d1117;
-            color: var(--text);
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 15px;
-            outline: none;
-        }
-        .textarea {
-            min-height: 140px;
-            resize: vertical;
-            font-family: "JetBrains Mono", monospace;
-        }
-        .stack { display: grid; gap: 12px; }
-        .simple-file-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .toolbar {
-            margin: 20px 0;
-        }
-        .search-form {
-            display: grid;
-            grid-template-columns: 1fr 145px 170px auto auto;
-            gap: 10px;
-        }
-        .bulkbar {
-            margin: 0 0 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .checkline { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; }
-        .items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-            gap: 16px;
-        }
-        .card {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(21, 27, 35, 0.92);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
-        }
-        .card h3 { margin: 0; font-size: 18px; word-break: break-word; }
-        .card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .flags { display: flex; gap: 6px; align-items: center; }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 9px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            background: rgba(154, 184, 216, 0.14);
-            color: var(--muted);
-        }
-        .badge.link { background: rgba(128, 199, 189, 0.14); color: var(--ok); }
-        .badge.image { background: rgba(255, 210, 125, 0.14); color: var(--accent); }
-        .badge.file { background: rgba(255, 139, 104, 0.14); color: var(--accent-2); }
-        .star, .pin { color: var(--accent); }
-        .meta { color: var(--muted); font-size: 13px; }
-        .preview {
-            margin: 0;
-            padding: 14px;
-            border-radius: 14px;
-            background: #0d1117;
-            color: #d6deeb;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 13px;
-        }
-        .thumb {
-            width: 100%;
-            max-height: 220px;
-            object-fit: cover;
-            border-radius: 14px;
-            border: 1px solid rgba(154, 184, 216, 0.2);
-        }
-        .file-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            border-radius: 14px;
-            background: #0d1117;
-            border: 1px solid rgba(154, 184, 216, 0.15);
-        }
-        .file-icon { font-size: 28px; }
-        .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; } 
-        .link-card {
-            display: flex;
-            gap: 12px;
-            padding: 14px;
-            border-radius: 14px;
-            background: #0d1117;
-            border: 1px solid rgba(128, 199, 189, 0.18);
-        }
-        .link-card img {
-            width: 88px;
-            height: 68px;
-            border-radius: 10px;
-            object-fit: cover;
-            flex: 0 0 auto;
-        }
-        .link-card strong { display: block; color: var(--text); }
-        .link-card p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
-        .footer {
-            margin-top: 34px;
-            color: var(--muted);
-            text-align: center;
-            font-size: 13px;
-        }
-        @media (max-width: 800px) {
-            .page { padding: 14px; }
-            .hero { align-items: flex-start; flex-direction: column; }
-            .hero h1 { font-size: 34px; }
-            .hero-actions { justify-content: flex-start; }
-            .search-form { grid-template-columns: 1fr; }
-            .items { grid-template-columns: 1fr; }
-            .actions { display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; }
-            .button { width: 100%; }
-            .link-card { flex-direction: column; }
-            .link-card img { width: 100%; height: auto; max-height: 220px; }
-        }
-    </style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 125, 0.15), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(125, 211, 252, 0.12), transparent 28%),
+        var(--bg);
+      color: var(--text);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .page {
+      width: min(1200px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 24px 0 60px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      color: #111827;
+      font-weight: 900;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 210, 125, 0.35);
+    }
+    .btn.primary {
+      color: #111827;
+      background: linear-gradient(135deg, var(--accent), #f7d98f);
+      border-color: transparent;
+      font-weight: 700;
+    }
+    .btn.ghost {
+      background: transparent;
+    }
+    .btn.tiny {
+      min-height: 28px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items: center;
+      margin: 18px 0 26px;
+    }
+    .headline {
+      padding: 10px 0;
+    }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 210, 125, 0.08);
+      border: 1px solid rgba(255, 210, 125, 0.2);
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.5rem, 5vw, 4.6rem);
+      letter-spacing: -0.065em;
+      line-height: 0.96;
+    }
+    .subtitle {
+      margin: 18px 0 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.7;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(17,24,39,0.92), rgba(15,23,42,0.96));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 42px var(--shadow);
+    }
+    .device {
+      padding: 16px;
+    }
+    .window {
+      min-height: 410px;
+      background: rgba(13,17,23,0.92);
+      border: 1px solid rgba(148,163,184,0.18);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .window-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff6d6d; }
+    .dot.yellow { background: #f5c76f; }
+    .dot.green { background: #7ef0c4; }
+    .mini-panel {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .mini-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .mini-panel span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .qr-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .qr-box {
+      width: 74px;
+      height: 74px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, rgba(17,24,39,0.9) 50%, transparent 50%), linear-gradient(rgba(17,24,39,0.9) 50%, transparent 50%);
+      background-size: 16px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .qr-box::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    .feature-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 18px;
+      padding: 10px 14px;
+    }
+    .feature-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.3fr 150px 170px auto auto;
+      gap: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .input, .select, .search input, .search select {
+      width: 100%;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(148,163,184,0.18);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+    }
+    .toolbar .input::placeholder,
+    .quick-add textarea::placeholder {
+      color: rgba(191, 202, 224, 0.7);
+    }
+
+    .quick-add {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 180px;
+      gap: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .quick-add textarea {
+      min-height: 80px;
+      width: 100%;
+      resize: vertical;
+      border: 1px solid rgba(148,163,184,0.18);
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      color: var(--text);
+      padding: 10px 12px;
+    }
+
+    .demo-shell {
+      background: linear-gradient(180deg, rgba(17,24,39,0.92), rgba(15,23,42,0.96));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 42px var(--shadow);
+      padding: 16px;
+    }
+    .demo-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .counter {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .checkbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .checkbar label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .items {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: rgba(17,24,39,0.9);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+    }
+    .card:hover {
+      border-color: rgba(255, 210, 125, 0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(2,6,23,0.28);
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .badge.text { background: rgba(125,211,252,0.12); color: #c9eeff; }
+    .badge.link { background: rgba(128,199,189,0.12); color: #c9fff1; }
+    .badge.file { background: rgba(255,143,112,0.12); color: #ffd2c7; }
+    .badge.image { background: rgba(255,210,125,0.12); color: #fce5af; }
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .meta .flags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .star, .pin {
+      display: inline-block;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+    .thumb {
+      width: 100%;
+      height: 146px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(255,210,125,0.12), rgba(125,211,252,0.12));
+      margin-bottom: 10px;
+    }
+    .preview {
+      margin: 0;
+      min-height: 88px;
+      padding: 12px 13px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.12);
+      background: rgba(15, 23, 42, 0.9);
+      color: #d8e4f3;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      font-size: 12px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn.small {
+      min-height: 30px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(17,24,39,0.95);
+      border: 1px solid var(--line);
+      color: var(--text);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.35);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events: none;
+      z-index: 32;
+      font-size: 13px;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .empty {
+      display: none;
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background: rgba(15,23,42,0.75);
+    }
+    .empty.visible { display: block; }
+
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      .items { grid-template-columns: 1fr; }
+      .quick-add { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-<main class="page">
-    <header class="hero">
-        <div>
-            <h1>ClipX</h1>
-            <p>Локальный буфер для текста, файлов, картинок, ссылок и всякого добра. В базе: 128.</p>
-        </div>
-        <div class="hero-actions">
-            <div class="connect-card" title="http://localhost:5050">
-                <img class="connect-qr" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='58' height='58' viewBox='0 0 58 58'%3E%3Cg fill='%23000000'%3E%3Crect x='0' y='0' width='6' height='6'/%3E%3Crect x='0' y='12' width='6' height='6'/%3E%3Crect x='0' y='24' width='6' height='6'/%3E%3Crect x='0' y='36' width='6' height='6'/%3E%3Crect x='0' y='48' width='6' height='6'/%3E%3Crect x='12' y='0' width='6' height='6'/%3E%3Crect x='24' y='0' width='6' height='6'/%3E%3Crect x='36' y='0' width='6' height='6'/%3E%3Crect x='48' y='0' width='6' height='6'/%3E%3Crect x='12' y='12' width='6' height='18'/%3E%3Crect x='18' y='12' width='6' height='6'/%3E%3Crect x='30' y='12' width='6' height='6'/%3E%3Crect x='42' y='12' width='6' height='18'/%3E%3Crect x='12' y='30' width='6' height='6'/%3E%3Crect x='24' y='30' width='6' height='18'/%3E%3Crect x='36' y='30' width='6' height='6'/%3E%3Crect x='48' y='30' width='6' height='18'/%3E%3Crect x='12' y='42' width='6' height='12'/%3E%3Crect x='24' y='48' width='6' height='6'/%3E%3Crect x='36' y='42' width='6' height='12'/%3E%3Crect x='48' y='48' width='6' height='6'/%3E%3Crect x='18' y='18' width='6' height='6'/%3E%3Crect x='30' y='18' width='6' height='6'/%3E%3Crect x='18' y='36' width='6' height='6'/%3E%3Crect x='42' y='42' width='6' height='6'/%3E%3Crect x='6' y='6' width='6' height='6'/%3E%3Crect x='18' y='48' width='6' height='6'/%3E%3Crect x='30' y='42' width='6' height='6'/%3E%3Crect x='42' y='18' width='6' height='6'/%3E%3Crect x='48' y='12' width='6' height='6'/%3E%3C/ g%3E%3C/svg%3E" alt="QR">
-                <div class="connect-text">
-                    <strong>Подключиться</strong>
-                    <button class="button tiny" type="button">Copy URL</button>
-                </div>
-                <div class="connect-url">http://localhost:5050</div>
-            </div>
-            <a class="button ghost" href="#">Тупой режим</a>
-            <a class="button" href="#">Экспорт</a>
-            <div class="status">LAN ready</div>
-        </div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <span>ClipX</span>
+      </div>
+      <div class="top-actions">
+        <span class="chip">Local-first</span>
+        <span class="chip">OCR</span>
+        <span class="chip">LAN ready</span>
+      </div>
     </header>
 
-    <section class="panel compact-panel feature-strip">
-        <div class="feature-pill">Drag &amp; Drop</div>
-        <div class="feature-pill">Ctrl+K / Ctrl+U / Ctrl+Enter</div>
-        <div class="feature-pill">Link previews</div>
-        <div class="feature-pill">Pin / Star</div>
-        <div class="feature-pill">Bulk actions</div>
-        <div class="feature-pill">Export / Import</div>
-        <div class="feature-pill">OCR</div>
-        <div class="feature-pill">No reload</div>
-    </section>
-
-    <section class="panel import-panel">
-        <h2>Импорт базы из ZIP</h2>
-        <div class="stack">
-            <input type="file" class="file-input" value="" aria-label="Импорт ZIP" />
-            <button class="button primary" type="button">Импортировать</button>
+    <section class="hero">
+      <div class="headline">
+        <div class="eyebrow">Clipboard manager</div>
+        <h1>Capture, organize, reuse.</h1>
+        <p class="subtitle">
+          Save text, links, files, screenshots, and OCR results in one private workspace.
+          Keep useful records close at hand with search, pinning, favorites, and quick bulk actions.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="https://github.com/SMETAHA/ClipX" target="_blank" rel="noreferrer">Open repo</a>
+          <a class="btn ghost" href="https://smetaha.github.io/ClipX/" target="_blank" rel="noreferrer">Live demo</a>
         </div>
-    </section>
+      </div>
 
-    <section class="panel">
-        <h2>Быстрый текст / код / ссылка</h2>
-        <div class="stack">
-            <input class="input" placeholder="Название, можно пустым">
-            <textarea class="textarea" placeholder="Вставь сюда текст, код или ссылку... Ctrl+Enter — сохранить">git checkout -b feature/new-clipx</textarea>
-            <button class="button primary" type="button">Сохранить текст</button>
-        </div>
-    </section>
+      <div class="panel device">
+        <div class="window">
+          <div class="window-bar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
 
-    <section class="panel">
-        <h2>Файл / картинка / папка</h2>
-        <div class="stack">
-            <input class="input" placeholder="Название, можно пустым">
-            <div class="simple-file-row">
-                <label class="button ghost">Выбрать файлы <input type="file" hidden multiple></label>
-                <label class="button ghost">Выбрать папку <input type="file" hidden multiple webkitdirectory directory></label>
-                <button class="button primary" type="button">Загрузить</button>
+          <div class="mini-panel">
+            <strong>Quick add</strong>
+            <span>Paste text, links, or code, then save to your clipboard library in a single step.</span>
+          </div>
+
+          <div class="mini-panel">
+            <strong>Connection</strong>
+            <div class="qr-row">
+              <div class="qr-box" aria-label="QR mock"></div>
+              <div>
+                <div style="font-weight:700; margin-bottom:6px;">http://192.168.1.25:5050</div>
+                <div style="color: var(--muted); font-size: 12px;">QR + LAN access</div>
+              </div>
             </div>
+          </div>
+
+          <div class="mini-panel">
+            <strong>Bulk actions</strong>
+            <span>Pin, favorite, export or remove selections without leaving the dashboard.</span>
+          </div>
         </div>
-        <p style="margin: 12px 0 0; color: var(--muted); font-size: 14px;">Перетащи файлы/папки/картинки сюда или просто брось текст/ссылку на страницу. Картинки попробуют пройти OCR.</p>
+      </div>
     </section>
 
-    <section class="toolbar">
-        <form class="search-form">
-            <input class="input" value="Поиск..." aria-label="Поиск">
-            <select class="select" aria-label="Тип">
-                <option>Все типы</option>
-                <option>Текст</option>
-                <option>Ссылки</option>
-                <option>Картинки</option>
-                <option>Файлы</option>
-            </select>
-            <select class="select" aria-label="Фильтр">
-                <option>Все</option>
-                <option>Закреплённые</option>
-                <option>Избранные</option>
-                <option>С OCR</option>
-            </select>
-            <button class="button" type="submit">Искать</button>
-            <a class="button ghost" href="#">Сброс</a>
-        </form>
-    </section>
-
-    <form>
-        <section class="bulkbar">
-            <label class="checkline"><input type="checkbox"> выбрать всё на странице</label>
-            <span class="bulk-count">Выбрано: 0</span>
-            <select class="select" style="width:auto; min-width: 190px;">
-                <option>В избранное</option>
-                <option>Убрать звезду</option>
-                <option>Закрепить</option>
-                <option>Открепить</option>
-                <option>Экспорт выбранного</option>
-                <option>Удалить</option>
-            </select>
-            <button class="button" type="submit" disabled>Применить выбранное</button>
-        </section>
-
-        <section class="items">
-            <article class="card">
-                <div class="card-head">
-                    <label class="checkline"><input type="checkbox"> <span class="badge">text</span></label>
-                    <div class="flags">
-                        <span class="pin">📌</span>
-                        <span class="star">★</span>
-                    </div>
-                </div>
-                <h3>Deploy checklist</h3>
-                <div class="meta">2026-11-17 · 1,4 KB</div>
-                <pre class="preview">- run smoke tests
-- verify QR access
-- export backup</pre>
-                <div class="actions">
-                    <a class="button tiny" href="#">Открыть</a>
-                    <button class="button tiny" type="button">Copy</button>
-                    <button class="button tiny" type="button">Pin</button>
-                </div>
-            </article>
-
-            <article class="card">
-                <div class="card-head">
-                    <label class="checkline"><input type="checkbox"> <span class="badge link">link</span></label>
-                    <div class="flags"><span class="star">★</span></div>
-                </div>
-                <h3>GitHub Copilot</h3>
-                <div class="meta">saved · 14:22</div>
-                <div class="link-card">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80" alt="Link preview">
-                    <div>
-                        <strong>GitHub Copilot</strong>
-                        <p>AI coding assistant and pair-programming companion.</p>
-                    </div>
-                </div>
-                <div class="actions">
-                    <a class="button tiny" href="#">Открыть</a>
-                    <button class="button tiny" type="button">Copy URL</button>
-                </div>
-            </article>
-
-            <article class="card">
-                <div class="card-head">
-                    <label class="checkline"><input type="checkbox"> <span class="badge image">image</span></label>
-                    <div class="flags"><span class="pin">📌</span></div>
-                </div>
-                <h3>Screenshot_2026</h3>
-                <div class="meta">OCR · 2.4 MB</div>
-                <img class="thumb" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80" alt="Image preview">
-                <pre class="preview">OCR: Review the API docs before merge.</pre>
-                <div class="actions">
-                    <a class="button tiny" href="#">Открыть</a>
-                    <button class="button tiny" type="button">OCR</button>
-                </div>
-            </article>
-        </section>
-    </form>
-
-    <div class="footer">
-        ClipX — локальный и приватный буфер обмена для текста, ссылок, файлов и OCR.
+    <div class="feature-strip panel">
+      <span class="feature-pill">Drag &amp; Drop</span>
+      <span class="feature-pill">Ctrl+K</span>
+      <span class="feature-pill">Link previews</span>
+      <span class="feature-pill">Pin / Star</span>
+      <span class="feature-pill">Bulk actions</span>
+      <span class="feature-pill">Export / Import</span>
+      <span class="feature-pill">OCR</span>
+      <span class="feature-pill">No reload</span>
     </div>
-</main>
+
+    <section class="toolbar panel">
+      <input id="searchInput" type="text" class="input" placeholder="Search text, links, files..." aria-label="Search" />
+      <select id="kindFilter" class="select" aria-label="Filter by type">
+        <option value="all">All types</option>
+        <option value="text">Text</option>
+        <option value="link">Link</option>
+        <option value="image">Image</option>
+        <option value="file">File</option>
+      </select>
+      <select id="flagFilter" class="select" aria-label="Filter by status">
+        <option value="all">All items</option>
+        <option value="pinned">Pinned</option>
+        <option value="favorite">Favorites</option>
+        <option value="ocr">With OCR</option>
+      </select>
+      <button id="filterBtn" class="btn" type="button">Search</button>
+      <button id="resetBtn" class="btn ghost" type="button">Reset</button>
+    </section>
+
+    <section class="quick-add panel">
+      <textarea id="quickNote" placeholder="Add a quick note or paste a URL or code snippet..."></textarea>
+      <div style="display:flex; align-items:flex-end; justify-content:flex-end;">
+        <button id="addNoteBtn" class="btn primary" type="button">Save item</button>
+      </div>
+    </section>
+
+    <section class="demo-shell">
+      <div class="demo-toolbar">
+        <div class="counter"><span id="resultCount">0</span> items</div>
+        <div class="checkbar">
+          <label><input id="selectAll" type="checkbox"> Select all</label>
+          <select id="bulkAction" aria-label="Bulk action" style="min-width:180px; min-height:36px; border-radius:12px; background:rgba(15,23,42,0.8); color:var(--text); border:1px solid rgba(148,163,184,0.18); padding:0 12px;">
+            <option value="favorite">Mark favorite</option>
+            <option value="unfavorite">Remove favorite</option>
+            <option value="pin">Pin</option>
+            <option value="unpin">Unpin</option>
+            <option value="delete">Delete</option>
+          </select>
+          <button id="applyBulk" class="btn" type="button">Apply</button>
+        </div>
+      </div>
+
+      <div id="items" class="items" aria-live="polite"></div>
+      <div id="emptyState" class="empty">No matching items found. Try another search or reset filters.</div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const initialItems = [
+      {
+        id: 1,
+        title: 'Deploy checklist',
+        type: 'text',
+        text: 'Run smoke tests\n- verify QR access\n- export backup\n- clean old screenshots',
+        date: 'Today',
+        pinned: true,
+        favorite: true,
+        ocr: false,
+        checked: false
+      },
+      {
+        id: 2,
+        title: 'GitHub Copilot',
+        type: 'link',
+        text: 'AI coding assistant and pair-programming companion.',
+        date: 'Saved',
+        pinned: false,
+        favorite: true,
+        ocr: false,
+        image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
+        checked: false
+      },
+      {
+        id: 3,
+        title: 'Screenshot_2026',
+        type: 'image',
+        text: 'OCR text: Review API docs before merge.',
+        date: 'OCR',
+        pinned: true,
+        favorite: false,
+        ocr: true,
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80',
+        checked: false
+      },
+      {
+        id: 4,
+        title: 'Design brief.pdf',
+        type: 'file',
+        text: 'Release plan and checklist for the next sprint.',
+        date: 'File',
+        pinned: false,
+        favorite: false,
+        ocr: false,
+        checked: false
+      },
+      {
+        id: 5,
+        title: 'Issue template',
+        type: 'text',
+        text: 'Reproduce bug\n- copy URL\n- open file\n- confirm quick export',
+        date: 'Saved',
+        pinned: false,
+        favorite: false,
+        ocr: false,
+        checked: false
+      },
+      {
+        id: 6,
+        title: 'Launch notes',
+        type: 'link',
+        text: 'Public release checklist and rollout note.',
+        date: 'Link',
+        pinned: false,
+        favorite: true,
+        ocr: false,
+        image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+        checked: false
+      }
+    ];
+
+    let items = [...initialItems];
+    const itemContainer = document.getElementById('items');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
+    const kindFilter = document.getElementById('kindFilter');
+    const flagFilter = document.getElementById('flagFilter');
+    const resultCount = document.getElementById('resultCount');
+    const toast = document.getElementById('toast');
+
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 1200);
+    };
+
+    const filteredItems = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const kind = kindFilter.value;
+      const flag = flagFilter.value;
+
+      return items.filter((item) => {
+        const haystack = `${item.title} ${item.text} ${item.type}`.toLowerCase();
+        const matchesQuery = !query || haystack.includes(query);
+        const matchesKind = kind === 'all' || item.type === kind;
+        const matchesFlag =
+          flag === 'all' ||
+          (flag === 'pinned' && item.pinned) ||
+          (flag === 'favorite' && item.favorite) ||
+          (flag === 'ocr' && item.ocr);
+        return matchesQuery && matchesKind && matchesFlag;
+      });
+    };
+
+    const renderCards = () => {
+      const list = filteredItems();
+      itemContainer.innerHTML = list.map((item) => {
+        const pin = item.pinned ? '📌' : '';
+        const star = item.favorite ? '★' : '☆';
+        const typeClass = item.type === 'link' ? 'link' : item.type === 'image' ? 'image' : item.type === 'file' ? 'file' : 'text';
+
+        const body = item.type === 'link' ? `
+          <div class="thumb" style="display:grid;place-items:center; background:linear-gradient(135deg, rgba(255,210,125,0.12), rgba(125,211,252,0.12)); color:var(--text); font-weight:700; font-size:13px;">preview</div>
+          <div style="margin-top:8px; color:var(--muted); font-size:12px; line-height:1.6;">${item.text}</div>
+        ` : item.type === 'image' ? `
+          <img class="thumb" src="${item.image}" alt="${item.title}" />
+          <div class="preview">${item.text}</div>
+        ` : `
+          <div class="preview">${item.text}</div>
+        `;
+
+        return `
+          <article class="card" data-id="${item.id}">
+            <div class="card-head">
+              <label style="display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px;">
+                <input class="item-check" type="checkbox" ${item.checked ? 'checked' : ''} data-check-id="${item.id}">
+                <span class="badge ${typeClass}">${item.type}</span>
+              </label>
+              <div class="flags">
+                <span class="pin">${pin}</span>
+                <span class="star">${star}</span>
+              </div>
+            </div>
+            <h3>${item.title}</h3>
+            <div class="meta">
+              <span>${item.date}</span>
+              <span>${item.ocr ? 'OCR' : 'Saved'}</span>
+            </div>
+            ${body}
+            <div class="card-actions">
+              <button class="btn tiny" type="button" data-copy="${item.text}">Copy</button>
+              <button class="btn tiny" type="button" data-pin="${item.id}">${item.pinned ? 'Unpin' : 'Pin'}</button>
+              <button class="btn tiny" type="button" data-favorite="${item.id}">${item.favorite ? 'Starred' : 'Favorite'}</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      resultCount.textContent = list.length;
+      emptyState.classList.toggle('visible', list.length === 0);
+
+      const selectAll = document.getElementById('selectAll');
+      selectAll.checked = list.length > 0 && list.every(item => item.checked);
+    };
+
+    const updateCheckState = () => {
+      const selected = items.filter(item => item.checked).length;
+      const applyBtn = document.getElementById('applyBulk');
+      applyBtn.disabled = selected === 0;
+      resultCount.textContent = filteredItems().length;
+    };
+
+    const handleCopy = async (text) => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const area = document.createElement('textarea');
+          area.value = text;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand('copy');
+          area.remove();
+        }
+        showToast('Copied to clipboard');
+      } catch {
+        showToast('Copy failed');
+      }
+    };
+
+    document.getElementById('filterBtn').addEventListener('click', renderCards);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      searchInput.value = '';
+      kindFilter.value = 'all';
+      flagFilter.value = 'all';
+      renderCards();
+    });
+
+    document.getElementById('addNoteBtn').addEventListener('click', () => {
+      const note = document.getElementById('quickNote').value.trim();
+      if (!note) {
+        showToast('Type a note first');
+        return;
+      }
+      items.unshift({
+        id: Date.now(),
+        title: 'Quick note',
+        type: 'text',
+        text: note,
+        date: 'Just now',
+        pinned: false,
+        favorite: false,
+        ocr: false,
+        checked: false
+      });
+      document.getElementById('quickNote').value = '';
+      renderCards();
+      showToast('Item added');
+    });
+
+    document.getElementById('selectAll').addEventListener('change', (event) => {
+      const checked = event.target.checked;
+      filteredItems().forEach(item => item.checked = checked);
+      renderCards();
+      updateCheckState();
+    });
+
+    document.getElementById('applyBulk').addEventListener('click', () => {
+      const action = document.getElementById('bulkAction').value;
+      const selected = items.filter(item => item.checked);
+      if (!selected.length) {
+        showToast('Select at least one item');
+        return;
+      }
+      selected.forEach((item) => {
+        if (action === 'favorite') item.favorite = true;
+        if (action === 'unfavorite') item.favorite = false;
+        if (action === 'pin') item.pinned = true;
+        if (action === 'unpin') item.pinned = false;
+        if (action === 'delete') {
+          const idx = items.findIndex(x => x.id === item.id);
+          if (idx >= 0) items.splice(idx, 1);
+        }
+      });
+      items.forEach(item => item.checked = false);
+      renderCards();
+      updateCheckState();
+      showToast('Bulk action applied');
+    });
+
+    itemContainer.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-copy]');
+      if (btn) {
+        handleCopy(btn.dataset.copy);
+      }
+
+      const pinBtn = event.target.closest('[data-pin]');
+      if (pinBtn) {
+        const item = items.find(x => x.id === Number(pinBtn.dataset.pin));
+        if (item) {
+          item.pinned = !item.pinned;
+          renderCards();
+          showToast(item.pinned ? 'Pinned' : 'Unpinned');
+        }
+      }
+
+      const favoriteBtn = event.target.closest('[data-favorite]');
+      if (favoriteBtn) {
+        const item = items.find(x => x.id === Number(favoriteBtn.dataset.favorite));
+        if (item) {
+          item.favorite = !item.favorite;
+          renderCards();
+          showToast(item.favorite ? 'Added to favorites' : 'Removed from favorites');
+        }
+      }
+    });
+
+    itemContainer.addEventListener('change', (event) => {
+      if (event.target.matches('.item-check')) {
+        const id = Number(event.target.dataset.checkId);
+        const item = items.find(x => x.id === id);
+        if (item) item.checked = event.target.checked;
+        updateCheckState();
+      }
+    });
+
+    searchInput.addEventListener('input', renderCards);
+    kindFilter.addEventListener('change', renderCards);
+    flagFilter.addEventListener('change', renderCards);
+
+    renderCards();
+    updateCheckState();
+  </script>
 </body>
 </html>
