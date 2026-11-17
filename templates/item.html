@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>{{ item.title or item.file_name or item.id }} · ClipX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='clipx_live.js') }}"></script>
+</head>
+<body>
+<main data-live-main class="page">
+    <header class="hero">
+        <div>
+            <h1>{{ item.title or item.file_name or item.id }}</h1>
+            <p>
+                <span class="badge {{ item.kind }}">{{ item.kind }}</span>
+                {% if item.pinned %} <span class="pin">📌</span>{% endif %}
+                {% if item.favorite %} <span class="star">★</span>{% endif %}
+                {{ item.created_at }}
+                {% if item.size %} · {{ item.size | filesize }}{% endif %}
+                {% if item.mime %} · {{ item.mime }}{% endif %}
+                {% if item.ocr_text %} · OCR{% endif %}
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('index') }}">Назад</a>
+            <a class="button ghost" href="{{ url_for('simple') }}">Тупой режим</a>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+        {% if item.kind in ["text", "link"] %}
+            {% if item.kind == "link" %}
+                <div class="link-detail">
+                    {% if item.link_image %}<img src="{{ item.link_image }}" alt="" loading="lazy">{% endif %}
+                    <div>
+                        <a href="{{ item.link_url or item.text_content }}" target="_blank" rel="noreferrer">
+                            {{ item.link_title or item.link_url or item.text_content }}
+                        </a>
+                        {% if item.link_description %}<p>{{ item.link_description }}</p>{% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <pre class="full-text" id="copy-source">{{ item.text_content }}</pre>
+
+            <div class="actions">
+                <button class="button primary" type="button" onclick="copyFromPre()">Скопировать</button>
+                <a class="button" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать txt</a>
+            </div>
+
+        {% elif preview.kind == "image" %}
+            <img class="full-image" src="{{ url_for('raw_item', item_id=item.id) }}" alt="">
+            <div class="actions">
+                <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать</a>
+                <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть в браузере</a>
+                <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+                <form action="{{ url_for('reocr', item_id=item.id) }}" method="post">
+                    <input type="hidden" name="next" value="{{ url_for('item', item_id=item.id) }}">
+                    <button class="button" type="submit">Перезапустить OCR</button>
+                </form>
+            </div>
+            {% if item.ocr_text %}
+                <h2>Распознанный текст</h2>
+                <pre class="full-text" id="ocr-source">{{ item.ocr_text }}</pre>
+                <button class="button" type="button" data-copy-target="ocr-source" onclick="copyFromId(this)">Скопировать OCR</button>
+            {% endif %}
+
+        {% elif preview.kind == "pdf" %}
+            <iframe class="file-preview-frame" src="{{ url_for('raw_item', item_id=item.id) }}"></iframe>
+            <div class="actions">
+                <a class="button primary" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть в новой вкладке</a>
+                <a class="button" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать PDF</a>
+                <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+            </div>
+
+        {% elif preview.kind == "video" %}
+            <video class="full-media" src="{{ url_for('raw_item', item_id=item.id) }}" controls preload="metadata"></video>
+            <div class="actions">
+                <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать видео</a>
+                <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть в браузере</a>
+                <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+            </div>
+
+        {% elif preview.kind == "audio" %}
+            <div class="audio-box">
+                <div class="file-icon big">🎧</div>
+                <audio class="full-audio" src="{{ url_for('raw_item', item_id=item.id) }}" controls preload="metadata"></audio>
+            </div>
+            <div class="actions">
+                <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать аудио</a>
+                <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть в браузере</a>
+                <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+            </div>
+
+        {% elif preview.kind == "text-file" %}
+            <div class="file-view top-gap-zero">
+                <div class="file-icon big">📝</div>
+                <div>
+                    <h2>{{ item.file_name }}</h2>
+                    <p>{{ item.mime }} · {{ item.size | filesize }}{% if preview.encoding %} · {{ preview.encoding }}{% endif %}</p>
+                </div>
+            </div>
+            {% if preview.ok %}
+                {% if preview.truncated %}<p class="message">Показаны первые 2 MB файла, остальное можно скачать.</p>{% endif %}
+                <pre class="full-text" id="file-source">{{ preview.text }}</pre>
+                <div class="actions">
+                    <button class="button primary" type="button" data-copy-target="file-source" onclick="copyFromId(this)">Скопировать</button>
+                    <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть raw</a>
+                    <a class="button" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать файл</a>
+                </div>
+            {% else %}
+                <p class="message">{{ preview.error }}</p>
+                <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать файл</a>
+            {% endif %}
+
+        {% elif preview.kind == "archive" %}
+            <div class="file-view top-gap-zero">
+                <div class="file-icon big">🗜️</div>
+                <div>
+                    <h2>{{ item.file_name }}</h2>
+                    <p>{{ item.mime }} · {{ item.size | filesize }}</p>
+                </div>
+            </div>
+            {% if preview.ok %}
+                <h2>Содержимое ZIP</h2>
+                {% if preview.truncated %}<p class="message">Показаны первые 200 файлов.</p>{% endif %}
+                <pre class="full-text archive-list">{% for name in preview.files %}{{ name }}
+{% endfor %}</pre>
+            {% else %}
+                <p class="message">{{ preview.error }}</p>
+            {% endif %}
+            <div class="actions">
+                <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать архив</a>
+                <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть raw</a>
+                <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+            </div>
+
+        {% else %}
+            <div class="file-view">
+                <div class="file-icon big">📦</div>
+                <div>
+                    <h2>{{ item.file_name }}</h2>
+                    <p>{{ item.mime }} · {{ item.size | filesize }}</p>
+                    <p class="muted">Этот тип браузер обычно не показывает внутри страницы. Можно попробовать открыть raw или скачать.</p>
+                    <div class="actions">
+                        <a class="button primary" data-no-ajax="true" href="{{ url_for('download', item_id=item.id) }}">Скачать файл</a>
+                        <a class="button" href="{{ url_for('raw_item', item_id=item.id) }}" target="_blank" rel="noreferrer">Открыть raw</a>
+                        <button class="button" type="button" data-copy-text="{{ url_for('raw_item', item_id=item.id, _external=True) }}" onclick="copyTextFromButton(this)">Copy URL</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="panel compact-panel">
+        <div class="actions">
+            <form action="{{ url_for('pin', item_id=item.id) }}" method="post">
+                <input type="hidden" name="next" value="{{ url_for('item', item_id=item.id) }}">
+                <button class="button" type="submit">{% if item.pinned %}Открепить{% else %}Закрепить{% endif %}</button>
+            </form>
+            <form action="{{ url_for('favorite', item_id=item.id) }}" method="post">
+                <input type="hidden" name="next" value="{{ url_for('item', item_id=item.id) }}">
+                <button class="button" type="submit">{% if item.favorite %}Убрать звезду{% else %}В избранное{% endif %}</button>
+            </form>
+            <form action="{{ url_for('delete', item_id=item.id) }}" method="post" onsubmit="return confirm('Удалить запись?')">
+                <input type="hidden" name="next" value="{{ url_for('index') }}">
+                <button class="button danger" type="submit">Удалить</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
