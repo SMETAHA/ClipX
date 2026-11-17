@@ -1,5 +1,10 @@
 # ClipX
 
+<div align="right">
+  <a href="README.md">English</a> ·
+  <a href="README.ru.md"><strong>Русский</strong></a>
+</div>
+
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.x-000000.svg)](https://flask.palletsprojects.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)

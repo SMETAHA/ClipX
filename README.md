@@ -1,13 +1,18 @@
 # ClipX
 
+<div align="right">
+  <a href="README.md"><strong>English</strong></a> ·
+  <a href="README.ru.md">Русский</a>
+</div>
+
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.x-000000.svg)](https://flask.palletsprojects.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub Pages](https://img.shields.io/badge/Demo-GitHub%20Pages-blue.svg)](https://smetaha.github.io/ClipX/)
 
-ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR.
+ClipX is a local-first clipboard manager for text, links, files, images, and OCR-powered notes.
 
-Этот проект помогает быстро собирать в одном месте всё, что обычно временно лежит в буфере обмена, в папке с файлами или в заметках: ссылки, текст, код, скриншоты, документы и изображения.
+It helps you keep everything you regularly copy, save, or reference in one private workspace: text snippets, URL bookmarks, code, screenshots, PDFs, and image-based OCR results.
 
 ## Почему ClipX
 
