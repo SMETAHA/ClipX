@@ -1,34 +1,70 @@
 # ClipX
 
-ClipX is a local-first clipboard manager for text, links, files, images, and OCR-powered snippets.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.x-000000.svg)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Demo-GitHub%20Pages-blue.svg)](https://smetaha.github.io/ClipX/)
+
+ClipX is a local-first clipboard manager for text, links, files, images, and OCR-powered notes.
+
+It helps you keep everything you regularly copy, save, or reference in one private workspace: text snippets, URL bookmarks, code, screenshots, PDFs, and image-based OCR results.
+
+## Why ClipX
+
+- local and private: your data stays on your machine
+- fast input: paste, drag & drop, upload files and folders
+- search and filters across item types and statuses
+- pin and favorite important records
+- OCR for extracting text from screenshots and images
+- QR / LAN access for local sharing on your network
+- import/export for backups and migrations
 
 ## What the project does
 
-- save text and URLs
+- save text, links, and code snippets
 - store files, screenshots, and PDFs
-- pin important entries and mark favorites
-- preview links automatically
-- extract text from images via OCR
-- work in both full and simplified mode
-- export and import database backups
-- connect over QR code and LAN
-- search and filter saved items quickly
+- mark favorite and pinned items
+- build automatic link previews
+- extract text from images using OCR
+- work in both full and simplified modes
+- search and filter records by type and status
+- import and export backups
+- access the app through QR and local LAN URLs
 
 ## Screenshots
+
+> Screenshot placeholders are ready — replace them with your own images when you want a finished public-facing gallery.
 
 ### Main interface
 
 <div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=ClipX+main+interface" alt="ClipX main interface" width="1200" />
+  <img src="https://placehold.co/1400x800/0f172a/e2e8f0?text=ClipX+Main+Interface" alt="ClipX main interface" width="1200" />
 </div>
 
 ### Simple mode
 
 <div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=ClipX+simple+mode" alt="ClipX simple mode" width="1200" />
+  <img src="https://placehold.co/1400x800/111827/a5b4fc?text=ClipX+Simple+Mode" alt="ClipX simple mode" width="1200" />
 </div>
 
+### Search, filters, and bulk actions
+
+<div align="center">
+  <img src="https://placehold.co/1400x800/172033/f8fafc?text=Search+Filters+Bulk+Actions" alt="ClipX filters and bulk actions" width="1200" />
+</div>
+
+## Tech stack
+
+- Python 3.11+
+- Flask
+- SQLite
+- Pillow
+- Tesseract OCR
+- QR code generation
+
 ## Quick start
+
+### 1) Install dependencies
 
 ```bash
 python -m venv .venv
@@ -36,20 +72,20 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-For OCR on Linux:
+### 2) OCR on Linux
 
 ```bash
 sudo apt update
 sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 ```
 
-Run:
+### 3) Run the app
 
 ```bash
 python app.py
 ```
 
-Open in the browser:
+Open it in a browser:
 
 ```text
 http://localhost:5050
@@ -63,20 +99,66 @@ CLIPX_PUBLIC_URL=http://192.168.1.25:5050 python app.py
 CLIPX_HOST_IP=192.168.1.25 python app.py
 ```
 
+## Project structure
+
+```text
+ClipX/
+├── app.py
+├── requirements.txt
+├── README.md
+├── README.ru.md
+├── README.en.md
+├── SECURITY.md
+├── SECURITY.ru.md
+├── LICENSE
+├── Procfile
+├── .env.example
+├── Dockerfile
+├── docker-compose.yml
+├── render.yaml
+├── railway.json
+├── docs/
+│   └── index.html
+├── deployment/
+│   ├── README.md
+│   ├── README.ru.md
+│   └── README.en.md
+├── static/
+├── templates/
+├── data/
+├── .github/workflows/pages.yml
+├── .gitignore
+└── .dockerignore
+```
+
+## Docs and links
+
+- [README.md](README.md)
+- [README.ru.md](README.ru.md)
+- [SECURITY.md](SECURITY.md)
+- [SECURITY.ru.md](SECURITY.ru.md)
+- [deployment/README.md](deployment/README.md)
+- [deployment/README.ru.md](deployment/README.ru.md)
+- [deployment/README.en.md](deployment/README.en.md)
+
 ## Deployment
 
-The repo includes templates for:
+The repo includes configuration for:
 
 - local Docker deployment
-- VPS / server deployment
+- VPS/server deployment
 - Render
 - Railway
 
-See [deployment/README.en.md](deployment/README.en.md).
+More details: [deployment/README.en.md](deployment/README.en.md)
 
-## GitHub Pages
+## GitHub Pages demo
 
-The `docs/index.html` preview is built from the real HTML/CSS sources in `templates/` and `static/`, without adding unrelated functionality.
+Live preview:
+
+- [GitHub Pages](https://smetaha.github.io/ClipX/)
+
+The file `docs/index.html` is a static preview of the actual app UI, built from the project's real HTML/CSS source in `templates/` and `static/` without inventing unrelated functionality.
 
 ## License
 
@@ -84,4 +166,4 @@ This project is distributed under the MIT License. See [LICENSE](LICENSE).
 
 ## Security
 
-See [SECURITY.md](SECURITY.md).
+Please review [SECURITY.md](SECURITY.md) before reporting a potential vulnerability.

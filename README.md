@@ -1,41 +1,65 @@
 # ClipX
 
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.x-000000.svg)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Demo-GitHub%20Pages-blue.svg)](https://smetaha.github.io/ClipX/)
+
 ClipX — локальный менеджер буфера обмена для текста, ссылок, файлов, изображений и OCR.
 
-Это проект для быстрой упаковки полезной информации: заметки, ссылки, файлы, скриншоты, код и всё, что обычно держат в буфере обмена или в папке «временно пригодится».
+Этот проект помогает быстро собирать в одном месте всё, что обычно временно лежит в буфере обмена, в папке с файлами или в заметках: ссылки, текст, код, скриншоты, документы и изображения.
 
-## Что умеет
+## Почему ClipX
 
-- сохранять текст и ссылки
-- хранить файлы, картинки и PDF
-- закреплять важные записи и помечать избранное
-- автоматически показывать превью ссылок
-- распознавать текст на изображениях через OCR
-- работать в обычном и упрощённом режиме
-- экспортировать и импортировать бэкап базы
-- подключаться по QR-коду и LAN
-- быстро искать и фильтровать записи
+- локальный и приватный: данные хранятся на устройстве
+- удобный быстрый ввод: paste, drag & drop, загрузка файлов и папок
+- поиск и фильтрация по типам и статусам
+- закрепление и избранное для важных записей
+- OCR для распознавания текста на изображениях
+- QR / LAN доступ для локального обмена с устройствами в сети
+- импорт/экспорт для бэкапа и переноса данных
+
+## Что умеет проект
+
+- сохранять текст, ссылки и фрагменты кода
+- хранить файлы, изображения и PDF
+- помечать избранное и закреплять важные записи
+- автоматически строить превью ссылок
+- извлекать текст из картинок через OCR
+- работать в стандартном и упрощённом режиме
+- искать и фильтровать записи по типу и статусу
+- экспортировать и импортировать резервные копии
+- использовать локальный QR и LAN-доступ
 
 ## Скриншоты
+
+> Места под скриншоты готовы — просто вставьте свои изображения в этот раздел.
 
 ### Основной интерфейс
 
 <div align="center">
-  <img src="https://placehold.co/1200x700/0f172a/e2e8f0?text=ClipX+main+interface" alt="ClipX main interface" width="1200" />
+  <img src="https://placehold.co/1400x800/0f172a/e2e8f0?text=ClipX+Main+Interface" alt="ClipX main interface" width="1200" />
 </div>
 
 ### Простая форма / быстрый ввод
 
 <div align="center">
-  <img src="https://placehold.co/1200x700/111827/a5b4fc?text=ClipX+simple+mode" alt="ClipX simple mode" width="1200" />
+  <img src="https://placehold.co/1400x800/111827/a5b4fc?text=ClipX+Simple+Mode" alt="ClipX simple mode" width="1200" />
 </div>
 
-## Стек
+### Поиск, фильтры и управление записями
+
+<div align="center">
+  <img src="https://placehold.co/1400x800/172033/f8fafc?text=Search+Filters+Bulk+Actions" alt="ClipX filters and bulk actions" width="1200" />
+</div>
+
+## Технологии
 
 - Python 3.11+
 - Flask
 - SQLite
-- Pillow + Tesseract OCR
+- Pillow
+- Tesseract OCR
 - QR code generation
 
 ## Быстрый старт
@@ -61,7 +85,7 @@ sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 python app.py
 ```
 
-Открыть в браузере:
+Открыть приложение в браузере:
 
 ```text
 http://localhost:5050
@@ -103,32 +127,38 @@ ClipX/
 ├── templates/
 ├── data/
 ├── .github/workflows/pages.yml
-└── .gitignore
+├── .gitignore
+└── .dockerignore
 ```
 
-## Документация
+## Документация и ссылки
 
-- [README в русском](README.ru.md)
-- [README in English](README.en.md)
-- [Security policy](SECURITY.md)
-- [Политика безопасности (RU)](SECURITY.ru.md)
-- [Deployment guide](deployment/README.md)
-- [Руководство по деплою](deployment/README.ru.md)
+- [README.ru.md](README.ru.md)
+- [README.en.md](README.en.md)
+- [SECURITY.md](SECURITY.md)
+- [SECURITY.ru.md](SECURITY.ru.md)
+- [deployment/README.md](deployment/README.md)
+- [deployment/README.ru.md](deployment/README.ru.md)
+- [deployment/README.en.md](deployment/README.en.md)
 
 ## Развёртывание
 
-В репозитории есть шаблоны для:
+В репозитории уже подготовлены шаблоны для:
 
 - локального запуска через Docker
-- VPS / server deployment
+- развёртывания на VPS
 - Render
 - Railway
 
-Смотрите: [deployment/README.md](deployment/README.md)
+Подробнее: [deployment/README.md](deployment/README.md)
 
-## GitHub Pages
+## GitHub Pages / демо
 
-В `docs/index.html` лежит preview интерфейса проекта, собранный по реальному HTML/CSS из `templates/` и `static/`, без лишних выдуманных функций.
+Интерфейс demo доступен здесь:
+
+- [GitHub Pages](https://smetaha.github.io/ClipX/)
+
+Файл `docs/index.html` используется как статический preview интерфейса и построен на основе реального UI проекта из `templates/` и `static/` без лишних выдуманных функций.
 
 ## Лицензия
 
@@ -136,4 +166,4 @@ ClipX/
 
 ## Безопасность
 
-Пожалуйста, читайте [SECURITY.md](SECURITY.md) перед сообщением о уязвимости.
+Пожалуйста, читайте [SECURITY.md](SECURITY.md) перед сообщением о потенциальной уязвимости.
