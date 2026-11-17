@@ -1,55 +1,113 @@
 # ClipX
 
-ClipX is a local web app for managing clipboard snippets, links, and files.
+ClipX is a local-first web app for collecting, organizing, and reusing text, links, and files from a personal clipboard workflow.
 
-## Features
+It is designed for quick capture, simple browsing, and local networking use on a home or office machine — without depending on a cloud backend.
 
-- Save text and URLs
-- Keep favorite and pinned entries
-- Upload files and images
-- Preview links automatically
-- OCR on uploaded images
-- Bulk actions for selected items
-- Import/export database backups
-- Optional QR-based access on the local network
-- Simple mode for lightweight use
+## Highlights
 
-## Requirements
+- Save snippets of text and URLs
+- Store and reopen files and images
+- Mark items as pinned or favorite
+- Preview web links automatically
+- Run OCR on uploaded images
+- Use bulk actions for selection-heavy workflows
+- Import and export database backups
+- Access the app over the local network via QR code
+- Switch to a lightweight `/simple` interface
+
+## Tech stack
 
 - Python 3.11+
-- pip
+- Flask
+- SQLite for local storage
+- Pillow + Tesseract for OCR support
+- QR code generation for easy access
 
-Install dependencies:
+## Quick start
+
+### 1) Install dependencies
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-For OCR support on Linux:
+### 2) Install OCR dependencies on Linux
 
 ```bash
+sudo apt update
 sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-eng
 ```
 
-## Run locally
+### 3) Run the app
 
 ```bash
 python app.py
 ```
 
-Then open the local URL shown in the terminal, usually:
+The app starts on port 5050 by default:
 
 ```text
 http://localhost:5050
 ```
 
-## Environment options
+## Environment variables
 
 ```bash
+CLIPX_PORT=5050 python app.py
 CLIPX_PUBLIC_URL=http://192.168.1.25:5050 python app.py
 CLIPX_HOST_IP=192.168.1.25 python app.py
 ```
 
+## Docker
+
+A production-style container setup is included for local deployment:
+
+```bash
+docker build -t clipx .
+docker run --rm -p 5050:5050 -v $(pwd)/data:/app/data clipx
+```
+
+You can also use Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+## GitHub Pages demo
+
+This repository includes a lightweight static landing page under `docs/` for GitHub Pages.
+
+The demo URL is:
+
+```text
+https://<your-user>.github.io/ClipX/
+```
+
+## Project structure
+
+```text
+ClipX/
+├── app.py
+├── requirements.txt
+├── README.md
+├── LICENSE
+├── Dockerfile
+├── docker-compose.yml
+├── docs/
+│   └── index.html
+├── static/
+├── templates/
+├── data/
+└── .github/workflows/pages.yml
+```
+
+## License
+
+This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
 ## Notes
 
-This project is intended for local usage and works best as a personal clipboard utility with a browser-based dashboard.
+ClipX is intended as a personal, local workflow tool. It is best suited for environments where you want a private clipboard manager with a browser UI and a local network-friendly setup.

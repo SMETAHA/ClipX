@@ -1,0 +1,11 @@
+services:
+  clipx:
+    build: .
+    container_name: clipx
+    ports:
+      - "5050:5050"
+    environment:
+      CLIPX_PORT: "5050"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
