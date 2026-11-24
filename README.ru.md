@@ -1,7 +1,7 @@
 # ClipX
 
 <div align="right">
-  <a href="README.md">English</a> ·
+  <a href="README.en.md">English</a> ·
   <a href="README.ru.md"><strong>Русский</strong></a>
 </div>
 
@@ -112,7 +112,6 @@ ClipX/
 ├── README.ru.md
 ├── README.en.md
 ├── SECURITY.md
-├── SECURITY.ru.md
 ├── LICENSE
 ├── Procfile
 ├── .env.example
@@ -139,7 +138,6 @@ ClipX/
 - [README.md](README.md)
 - [README.en.md](README.en.md)
 - [SECURITY.md](SECURITY.md)
-- [SECURITY.ru.md](SECURITY.ru.md)
 - [deployment/README.md](deployment/README.md)
 - [deployment/README.ru.md](deployment/README.ru.md)
 - [deployment/README.en.md](deployment/README.en.md)
@@ -166,7 +164,3 @@ ClipX/
 ## Лицензия
 
 Проект распространяется по лицензии MIT. См. [LICENSE](LICENSE).
-
-## Безопасность
-
-Пожалуйста, читайте [SECURITY.ru.md](SECURITY.ru.md) перед сообщением о возможной уязвимости.
